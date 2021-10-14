@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import flickrapp.com.domain.models.DataHolder
+import flickrapp.com.domain.models.RouteNames
 import flickrapp.com.domain.models.SearchResult
 import flickrapp.com.ui.components.NoItem
 import flickrapp.com.ui.components.TextAutoComplete
@@ -69,7 +70,7 @@ fun SearchScreen(
                 items(result.items) { item ->
                     Box(modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp)) {
                         SearchItemCard(item = item, onClick = {
-                            // TODO: Launch details screen
+                            navController.navigate(RouteNames.getSearchItemDetailsURL(itemId = item.getId()))
                         })
                     }
                 }

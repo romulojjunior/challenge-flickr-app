@@ -22,4 +22,10 @@ class SearchItem(
     val authorId: String,
     @SerializedName("tags")
     val tags: String
-)
+) {
+
+    fun getId(): String {
+        // https:\/\/www.flickr.com\/photos\/userId\/mediaId\/
+        return link.removeSurrounding("\\").split("/")[5]
+    }
+}
