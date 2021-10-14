@@ -6,7 +6,7 @@ import retrofit2.http.Query
 
 interface FlickrApiService {
     @GET("services/feeds/photos_public.gne?&nojsoncallback=1")
-    suspend fun searchBtTags(
+    suspend fun searchByTags(
         @Query("tags") tags: String,
         @Query("format") format: String = "json"
     ): SearchResult

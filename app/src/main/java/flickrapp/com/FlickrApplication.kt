@@ -1,7 +1,7 @@
 package flickrapp.com
 
 import android.app.Application
-import flickrapp.com.di.appDIModule
+import flickrapp.com.di.*
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.GlobalContext.startKoin
@@ -13,7 +13,13 @@ class FlickrApplication : Application(){
         startKoin{
             androidLogger()
             androidContext(this@FlickrApplication)
-            modules(appDIModule)
+            modules(
+                appDIModule,
+                viewModelsDIModule,
+                repositoriesDIModule,
+                usecasesDIModule,
+                apiServicesDIModule
+            )
         }
     }
 }
