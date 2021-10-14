@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         applicationId "flickrapp.com"
-        minSdk 23
+        minSdk 26
         targetSdk 31
         versionCode 1
         versionName "1.0"
@@ -23,6 +23,15 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+            buildConfigField "String", "API_URL", "\"https://api.flickr.com/\""
+        }
+
+        debug {
+            applicationIdSuffix '.debug'
+            versionNameSuffix '.debug'
+
+            buildConfigField "String", "API_URL", "\"https://api.flickr.com/\""
         }
     }
     compileOptions {
@@ -65,4 +74,12 @@ dependencies {
 
     // DI - Koin
     implementation "io.insert-koin:koin-android:$koin_version"
+
+    // Http client - Retrofit
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+
+    // Parser libs
+    implementation "com.google.code.gson:gson:2.8.8"
+
 }
