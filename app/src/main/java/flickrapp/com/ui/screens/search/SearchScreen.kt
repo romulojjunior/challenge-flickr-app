@@ -4,9 +4,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -17,6 +16,7 @@ import androidx.navigation.compose.rememberNavController
 import flickrapp.com.domain.models.DataHolder
 import flickrapp.com.domain.models.SearchResult
 import flickrapp.com.ui.components.NoItem
+import flickrapp.com.ui.components.TextAutoComplete
 import flickrapp.com.ui.components.TryAgain
 import flickrapp.com.ui.previews.SearchResultDHPreview
 import flickrapp.com.ui.theme.FlickrAppTheme
@@ -27,15 +27,14 @@ fun SearchScreen(
     searchResultDH: MutableState<DataHolder<SearchResult>>,
     onSearch: (query: String) -> Unit = {}
 ) {
-    val searchQuery = remember {
-        "Toronto, city"
-    }
+    var searchQuery by rememberSaveable { mutableStateOf("") }
 
     Scaffold(
         topBar = {
-            Button(onClick = { onSearch("beach") }) {
-                Text(text = "Search")
-            }
+            TextAutoComplete(onSearch = {
+                searchQuery = it
+                onSearch(it)
+            }, recentSearchTerms = listOf("Toronto", "City","Beach"))
         }
     ) {
         if (searchResultDH.value.isLoading) {
