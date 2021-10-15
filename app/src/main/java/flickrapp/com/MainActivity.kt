@@ -36,15 +36,16 @@ class MainActivity : ComponentActivity() {
 
                     composable(
                         route = "${RouteNames.searchItemDetails}/{itemId}",
-                        arguments = listOf(navArgument("itemId") { type = NavType.StringType })) {
+                        arguments = listOf(navArgument("itemId") { type = NavType.StringType })
+                    ) {
 
                         val searchViewModel by viewModel<SearchViewModel>()
                         val itemId = it.arguments?.getString("itemId")
 
+                        searchViewModel.selectSearchItem(itemId)
                         SearchItemScreen(
                             navController = navController,
-                            searchResultDH = searchViewModel.searchResultDH,
-                            itemId = itemId
+                            searchItemDH = searchViewModel.selectedSearchItemDH,
                         )
                     }
                 }

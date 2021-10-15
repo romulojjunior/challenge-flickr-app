@@ -5,6 +5,7 @@ import flickrapp.com.BuildConfig
 import flickrapp.com.data.api.FlickrApiService
 import flickrapp.com.data.api.deserializers.DateTimeDeserializer
 import flickrapp.com.domain.repository.SearchRepository
+import flickrapp.com.domain.usecases.search.FilterSearchItemByIdUseCase
 import flickrapp.com.domain.usecases.search.SearchByTagUseCase
 import flickrapp.com.ui.viewModels.SearchViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -50,10 +51,14 @@ val usecasesDIModule = module {
     single {
         SearchByTagUseCase(searchRepository = get())
     }
+
+    single {
+        FilterSearchItemByIdUseCase()
+    }
 }
 
 val viewModelsDIModule = module {
     viewModel {
-        SearchViewModel(searchByTagUseCase = get())
+        SearchViewModel(searchByTagUseCase = get(), get())
     }
 }
