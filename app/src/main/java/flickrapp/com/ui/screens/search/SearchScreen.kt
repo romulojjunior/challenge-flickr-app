@@ -35,7 +35,7 @@ fun SearchScreen(
             TextAutoComplete(onSearch = {
                 searchQuery = it
                 onSearch(it)
-            }, recentSearchTerms = listOf("Toronto", "City","Beach"))
+            }, recentSearchTerms = listOf("Toronto", "City","Beach", "Trip", "New York"))
         }
     ) {
         if (searchResultDH.value.isLoading) {

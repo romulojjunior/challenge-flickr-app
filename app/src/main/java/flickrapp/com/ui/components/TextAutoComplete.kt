@@ -11,6 +11,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
@@ -24,11 +25,9 @@ fun TextAutoComplete(
 ) {
     var textValue by rememberSaveable { mutableStateOf("") }
     var isExpanded by rememberSaveable { mutableStateOf(false) }
-
+    val focusManager = LocalFocusManager.current
 
     Card(elevation = 2.dp, modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp)) {
-        stringResource(id = R.string.search)
-
         TextField(
             value = textValue,
             singleLine = true,
@@ -38,7 +37,10 @@ fun TextAutoComplete(
                 backgroundColor = Color.Transparent
             ),
             keyboardActions = KeyboardActions(
-                onSearch = { onSearch(textValue) }
+                onSearch = {
+                    focusManager.clearFocus()
+                    onSearch(textValue)
+                }
             ),
             keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Search
@@ -51,7 +53,10 @@ fun TextAutoComplete(
                 Text(text = stringResource(id = R.string.search))
             },
             trailingIcon = {
-                IconButton(onClick = { onSearch(textValue) }) {
+                IconButton(onClick = {
+                    focusManager.clearFocus()
+                    onSearch(textValue)
+                }) {
                     Icon(
                         Icons.Filled.Search,
                         contentDescription = stringResource(id = R.string.search)
@@ -73,7 +78,7 @@ fun TextAutoComplete(
             modifier = Modifier.fillMaxWidth()
         ) {
 
-            Column() {
+            Column {
                 recentSearchTerms.forEach { item ->
                     Box(modifier = Modifier
                         .fillMaxWidth()
