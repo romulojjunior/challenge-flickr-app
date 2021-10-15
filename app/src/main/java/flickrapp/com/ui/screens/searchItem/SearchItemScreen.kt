@@ -72,6 +72,11 @@ fun SearchItemScreen(
                     )
                 }
 
+                // Title
+                item {
+                    CardInfo(title = stringResource(id = R.string.title), content = searchItem.title)
+                }
+
                 // Author
                 item {
                     CardInfo(title = stringResource(id = R.string.author), content = searchItem.author)
