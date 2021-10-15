@@ -48,10 +48,6 @@ fun SearchScreen(
         }
 
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
-            if (searchResultDH.value.isNotInitialized()) {
-                onSearch(searchQuery)
-            }
-
             searchResultDH.value.exception?.let {
                 item {
                     TryAgain {

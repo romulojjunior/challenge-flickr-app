@@ -8,6 +8,7 @@ class SearchByTagUseCase(
     ) {
 
     suspend fun execute(tags: String): SearchResult {
+        if (tags.isBlank()) throw Exception("Invalid tag.")
         return searchRepository.searchByTags(tags = tags)
     }
 }
