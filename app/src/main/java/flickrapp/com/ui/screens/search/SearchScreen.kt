@@ -1,10 +1,9 @@
 package flickrapp.com.ui.screens.search
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.GridCells
+import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Scaffold
@@ -26,6 +25,7 @@ import flickrapp.com.ui.components.TryAgain
 import flickrapp.com.ui.previews.SearchResultDHPreview
 import flickrapp.com.ui.theme.FlickrAppTheme
 
+@ExperimentalFoundationApi
 @Composable
 fun SearchScreen(
     navController: NavHostController,
@@ -39,7 +39,7 @@ fun SearchScreen(
             TextAutoComplete(onSearch = {
                 searchQuery = it
                 onSearch(it)
-            }, recentSearchTerms = listOf("Toronto", "City","Beach", "Trip", "New York"))
+            }, recentSearchTerms = listOf("Toronto", "City", "Beach", "Trip", "New York"))
         }
     ) {
         if (searchResultDH.value.isLoading) {
@@ -51,24 +51,27 @@ fun SearchScreen(
             }
         }
 
-        LazyColumn(modifier = Modifier.fillMaxWidth()) {
-            searchResultDH.value.exception?.let {
-                item {
-                    TryAgain {
-                        onSearch(searchQuery)
-                    }
-                }
+        searchResultDH.value.exception?.let {
+            TryAgain {
+                onSearch(searchQuery)
+            }
+        }
+
+        searchResultDH.value.data?.let { result ->
+            if (result.items.isEmpty()) {
+                NoItem()
             }
 
-            searchResultDH.value.data?.let { result ->
-                if (result.items.isEmpty()) {
-                    item {
-                        NoItem()
-                    }
-                }
-
+            LazyVerticalGrid(
+                cells = GridCells.Fixed(2),
+                contentPadding = PaddingValues(16.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
                 items(result.items) { item ->
-                    Box(modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp)) {
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(16.dp),
+                        modifier = Modifier.padding(8.dp),
+                    ) {
                         SearchItemCard(item = item, onClick = {
                             navController.navigate(RouteNames.getSearchItemDetailsURL(itemId = item.getId()))
                         })
@@ -79,6 +82,7 @@ fun SearchScreen(
     }
 }
 
+@ExperimentalFoundationApi
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview(

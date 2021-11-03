@@ -7,17 +7,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-open class BaseViewModel(
-    var dispatcherIO: CoroutineDispatcher = Dispatchers.IO,
-    var dispatcherMain: CoroutineDispatcher = Dispatchers.Main,
-    var dispatcherDefault: CoroutineDispatcher = Dispatchers.Default,
-) : ViewModel() {
-
+open class BaseViewModel : ViewModel() {
     fun <R> async(
         onStart: suspend () -> R,
         onComplete: suspend (result: R) -> Unit = {},
         onError: (e: Exception) -> Unit = {},
-        dispatcher: CoroutineDispatcher = dispatcherIO
+        dispatcher: CoroutineDispatcher = Dispatchers.IO
     ) {
         viewModelScope.launch {
             withContext(dispatcher) {

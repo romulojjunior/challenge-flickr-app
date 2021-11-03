@@ -5,7 +5,7 @@ import java.time.LocalDateTime
 
 class SearchItem(
     @SerializedName("title")
-    val title: String,
+    val title: String?,
     @SerializedName("link")
     val link: String,
     @SerializedName("media")

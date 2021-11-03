@@ -22,6 +22,7 @@ import flickrapp.com.R
 import flickrapp.com.ui.components.CardInfo
 import flickrapp.com.ui.components.HTMLText
 import flickrapp.com.ui.components.TextLink
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun SearchItemScreen(
@@ -74,12 +75,18 @@ fun SearchItemScreen(
 
                 // Title
                 item {
-                    CardInfo(title = stringResource(id = R.string.title), content = searchItem.title)
+                    CardInfo(
+                        title = stringResource(id = R.string.title),
+                        content = searchItem.title ?: stringResource(id = R.string.no_title)
+                    )
                 }
 
                 // Author
                 item {
-                    CardInfo(title = stringResource(id = R.string.author), content = searchItem.author)
+                    CardInfo(
+                        title = stringResource(id = R.string.author),
+                        content = searchItem.author
+                    )
                 }
 
                 // Tags
@@ -87,15 +94,32 @@ fun SearchItemScreen(
                     CardInfo(title = stringResource(id = R.string.tags), content = searchItem.tags)
                 }
 
+                // Tags
+                item {
+                    CardInfo(
+                        title = stringResource(id = R.string.createdAt),
+                        content = searchItem.dateTaken.format(
+                            DateTimeFormatter.ofPattern("yyyy/MM/dd")
+                        )
+                    )
+                }
+
                 // Description
                 item {
-                    Card(modifier = Modifier
-                        .padding(vertical = 8.dp, horizontal = 16.dp)
-                        .fillMaxWidth()) {
-                        Column(modifier = Modifier
-                            .padding(16.dp)
-                            .fillMaxWidth()) {
-                            Text(text = stringResource(id = R.string.description), style = MaterialTheme.typography.subtitle2)
+                    Card(
+                        modifier = Modifier
+                            .padding(vertical = 8.dp, horizontal = 16.dp)
+                            .fillMaxWidth()
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .padding(16.dp)
+                                .fillMaxWidth()
+                        ) {
+                            Text(
+                                text = stringResource(id = R.string.description),
+                                style = MaterialTheme.typography.subtitle2
+                            )
                             HTMLText(html = searchItem.description)
                         }
                     }
@@ -109,7 +133,9 @@ fun SearchItemScreen(
                                 text = stringResource(id = R.string.visit),
                                 color = MaterialTheme.colors.primary,
                                 textAlign = TextAlign.Center,
-                                modifier = Modifier.fillMaxWidth().padding(16.dp)
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(16.dp)
                             )
                         }
                     }
