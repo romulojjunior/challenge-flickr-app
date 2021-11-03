@@ -27,11 +27,11 @@ class MainActivity : ComponentActivity() {
             FlickrAppTheme {
                 NavHost(navController = navController, startDestination = RouteNames.search) {
                     composable(route = RouteNames.search) {
-
                         val searchViewModel by viewModel<SearchViewModel>()
                         SearchScreen(
                             navController = navController,
                             searchResultDH = searchViewModel.searchResultDH,
+                            recentSearchTerms = searchViewModel.recentSearchTerms,
                             onSearch = searchViewModel::onSearch
                         )
                     }
@@ -40,7 +40,6 @@ class MainActivity : ComponentActivity() {
                         route = "${RouteNames.searchItemDetails}/{itemId}",
                         arguments = listOf(navArgument("itemId") { type = NavType.StringType })
                     ) {
-
                         val searchViewModel by viewModel<SearchViewModel>()
                         val itemId = it.arguments?.getString("itemId")
 

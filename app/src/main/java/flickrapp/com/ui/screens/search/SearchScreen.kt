@@ -30,6 +30,7 @@ import flickrapp.com.ui.theme.FlickrAppTheme
 fun SearchScreen(
     navController: NavHostController,
     searchResultDH: MutableState<DataHolder<SearchResult>>,
+    recentSearchTerms: MutableState<List<String>>,
     onSearch: (query: String) -> Unit = {}
 ) {
     var searchQuery by rememberSaveable { mutableStateOf("") }
@@ -39,7 +40,7 @@ fun SearchScreen(
             TextAutoComplete(onSearch = {
                 searchQuery = it
                 onSearch(it)
-            }, recentSearchTerms = listOf("Toronto", "City", "Beach", "Trip", "New York"))
+            }, recentSearchTerms = recentSearchTerms.value)
         }
     ) {
         if (searchResultDH.value.isLoading) {
@@ -91,11 +92,15 @@ fun DefaultPreview(
 
 ) {
     val navController = rememberNavController()
+    val recentSearchTerms = remember {
+        mutableStateOf(listOf("Toronto"))
+    }
 
     FlickrAppTheme {
         SearchScreen(
             navController = navController,
-            searchResultDH = searchResultDH
+            searchResultDH = searchResultDH,
+            recentSearchTerms = recentSearchTerms
         )
     }
 }
