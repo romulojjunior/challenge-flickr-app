@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 open class BaseViewModel : ViewModel() {
     fun <R> async(
@@ -14,12 +13,14 @@ open class BaseViewModel : ViewModel() {
         onError: (e: Exception) -> Unit = {},
         dispatcher: CoroutineDispatcher = Dispatchers.IO
     ) {
-        viewModelScope.launch {
-            withContext(dispatcher) {
-                try {
-                    val result = onStart()
+        viewModelScope.launch(context = dispatcher) {
+            try {
+                val result = onStart()
+                viewModelScope.launch(context = Dispatchers.Main) {
                     onComplete.invoke(result)
-                } catch (e: Exception) {
+                }
+            } catch (e: Exception) {
+                viewModelScope.launch(context = Dispatchers.Main) {
                     onError.invoke(e)
                 }
             }
