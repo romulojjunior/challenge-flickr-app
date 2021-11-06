@@ -18,7 +18,8 @@ class FlickrApplication : Application(){
                 viewModelsDIModule,
                 repositoriesDIModule,
                 usecasesDIModule,
-                apiServicesDIModule
+                apiServicesDIModule,
+                localDataDIModule
             )
         }
     }

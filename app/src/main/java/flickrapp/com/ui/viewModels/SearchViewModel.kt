@@ -5,21 +5,27 @@ import flickrapp.com.domain.models.DataHolder
 import flickrapp.com.domain.models.SearchItem
 import flickrapp.com.domain.models.SearchResult
 import flickrapp.com.domain.usecases.search.FilterSearchItemByIdUseCase
+import flickrapp.com.domain.usecases.search.GetRecentSearchTermsUseCase
+import flickrapp.com.domain.usecases.search.SaveSearchTermUseCase
 import flickrapp.com.domain.usecases.search.SearchByTagUseCase
 
 class SearchViewModel(
     private val searchByTagUseCase: SearchByTagUseCase,
-    private val filterSearchItemByIdUseCase: FilterSearchItemByIdUseCase
+    private val filterSearchItemByIdUseCase: FilterSearchItemByIdUseCase,
+    private val saveSearchTermUseCase: SaveSearchTermUseCase,
+    private val getRecentSearchTermsUseCase: GetRecentSearchTermsUseCase
 ) : BaseViewModel() {
 
     var searchResultDH = mutableStateOf<DataHolder<SearchResult>>(DataHolder())
     var selectedSearchItemDH = mutableStateOf<DataHolder<SearchItem>>(DataHolder())
-    var recentSearchTerms = mutableStateOf(listOf("Toronto", "City", "Beach", "Trip", "New York"))
+    var recentSearchTerms = mutableStateOf(emptyList<String>())
 
     fun onSearch(query: String) {
         async(
             onStart = {
                 searchResultDH.value = DataHolder(isLoading = true)
+                saveSearchTermUseCase.execute(term = query)
+                recentSearchTerms.value = getRecentSearchTermsUseCase.execute()
                 searchByTagUseCase.execute(tags = query)
             },
             onComplete = { result ->
