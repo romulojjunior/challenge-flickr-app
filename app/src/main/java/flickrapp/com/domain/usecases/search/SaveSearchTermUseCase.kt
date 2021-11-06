@@ -8,12 +8,15 @@ class SaveSearchTermUseCase(
 
     suspend fun execute(term: String) {
         if (term.isBlank()) throw Exception("Invalid term.")
-
         if (term.contains(",")) {
             term.split(",").forEach {
-                searchRepository.saveSearchTerm(term = it)
+                val termContent = it.trimMargin()
+                searchRepository.deleteSearchTermByValue(value = termContent)
+                searchRepository.saveSearchTerm(term = termContent)
             }
         } else {
+            val termContent = term.trimMargin()
+            searchRepository.deleteSearchTermByValue(value = termContent)
             searchRepository.saveSearchTerm(term = term)
         }
     }

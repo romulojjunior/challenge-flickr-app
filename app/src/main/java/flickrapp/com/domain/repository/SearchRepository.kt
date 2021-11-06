@@ -20,4 +20,12 @@ class SearchRepository(
     suspend fun getRecentSearchTerms(): List<SearchTermEntity> {
         return localDatabase.searchTermDAO().getRecentSearchTerms()
     }
+
+    suspend fun deleteOldSearchTermsUntilId(id: Long) {
+        return localDatabase.searchTermDAO().deleteOldSearchTerms(id = id)
+    }
+
+    suspend fun deleteSearchTermByValue(value: String) {
+        return localDatabase.searchTermDAO().deleteSearchTermByValue(value = value)
+    }
 }

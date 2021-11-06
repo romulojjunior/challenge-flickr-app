@@ -20,6 +20,14 @@ class SearchViewModel(
     var selectedSearchItemDH = mutableStateOf<DataHolder<SearchItem>>(DataHolder())
     var recentSearchTerms = mutableStateOf(emptyList<String>())
 
+    init {
+        async(onStart = {
+            getRecentSearchTermsUseCase.execute()
+        }, onComplete = { terms ->
+            recentSearchTerms.value = terms
+        })
+    }
+
     fun onSearch(query: String) {
         async(
             onStart = {

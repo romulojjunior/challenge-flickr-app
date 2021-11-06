@@ -12,5 +12,11 @@ interface SearchTermDAO {
     suspend fun delete(entity: SearchTermEntity)
 
     @Query("SELECT * FROM search_terms ORDER BY  id DESC LIMIT 5")
-    fun getRecentSearchTerms(): List<SearchTermEntity>
+    suspend fun getRecentSearchTerms(): List<SearchTermEntity>
+
+    @Query("DELETE FROM search_terms WHERE id < :id")
+    suspend fun deleteOldSearchTerms(id: Long)
+
+    @Query("DELETE FROM search_terms WHERE value == :value")
+    suspend fun deleteSearchTermByValue(value: String)
 }

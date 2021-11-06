@@ -7,6 +7,13 @@ class GetRecentSearchTermsUseCase(
     ) {
 
     suspend fun execute(): List<String> {
+        val entities = searchRepository.getRecentSearchTerms()
+
+        if (entities.count() == 5) {
+            entities.last().id?.let { entityId ->
+                searchRepository.deleteOldSearchTermsUntilId(entityId)
+            }
+        }
         return searchRepository.getRecentSearchTerms().map { it.value }
     }
 }

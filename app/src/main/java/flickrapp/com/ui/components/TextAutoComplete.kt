@@ -25,12 +25,15 @@ fun TextAutoComplete(
 ) {
     var textValue by rememberSaveable { mutableStateOf("") }
     var isExpanded by rememberSaveable { mutableStateOf(false) }
+    var submited by rememberSaveable { mutableStateOf(false) }
+
     val focusManager = LocalFocusManager.current
 
     Card(elevation = 2.dp, modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp)) {
         TextField(
             value = textValue,
             singleLine = true,
+            maxLines = 1,
             colors = TextFieldDefaults.textFieldColors(
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
@@ -39,6 +42,7 @@ fun TextAutoComplete(
             keyboardActions = KeyboardActions(
                 onSearch = {
                     focusManager.clearFocus()
+                    submited = true
                     onSearch(textValue)
                 }
             ),
@@ -47,6 +51,7 @@ fun TextAutoComplete(
             ),
             onValueChange = {
                 textValue = it
+                submited = false
             },
             modifier = Modifier.fillMaxWidth(),
             placeholder = {
@@ -55,6 +60,7 @@ fun TextAutoComplete(
             trailingIcon = {
                 IconButton(onClick = {
                     focusManager.clearFocus()
+                    submited = true
                     onSearch(textValue)
                 }) {
                     Icon(
@@ -65,7 +71,19 @@ fun TextAutoComplete(
             }
         )
 
-        isExpanded = textValue.length == 1
+        val filteredItems = if (textValue.length == 1) {
+            recentSearchTerms
+        } else if (textValue.length > 1) {
+            recentSearchTerms.filter { it.lowercase().contains(textValue.lowercase()) }
+        } else {
+            emptyList()
+        }
+
+        isExpanded = textValue.length == 1 || filteredItems.isNotEmpty()
+
+        if (submited) {
+            isExpanded = false
+        }
 
         DropdownMenu(
             expanded = isExpanded,
@@ -79,13 +97,15 @@ fun TextAutoComplete(
         ) {
 
             Column {
-                recentSearchTerms.forEach { item ->
+                filteredItems.forEach { item ->
                     Box(modifier = Modifier
                         .fillMaxWidth()
                         .clickable {
+                            focusManager.clearFocus()
                             onSearch(item)
                             textValue = item
                             isExpanded = false
+                            submited = true
                         }) {
                         Text(item, modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp))
                     }
