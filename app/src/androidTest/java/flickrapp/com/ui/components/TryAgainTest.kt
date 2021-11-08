@@ -15,7 +15,7 @@ class TryAgainTest {
     val composeTestRule = createComposeRule()
 
     @Test
-    fun tryAgain() {
+    fun runWithSuccess() {
         var isClicked = false
         composeTestRule.setContent {
             FlickrAppTheme {

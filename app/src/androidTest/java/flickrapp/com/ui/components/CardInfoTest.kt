@@ -13,7 +13,7 @@ class CardInfoTest {
     val composeTestRule = createComposeRule()
 
     @Test
-    fun cardInfo() {
+    fun runWithSuccess() {
         composeTestRule.setContent {
             FlickrAppTheme {
                 CardInfo(title = "CardTitle", content = "CardContent")
