@@ -13,4 +13,5 @@
     <string name="title">Title</string>
     <string name="createdAt">Created at</string>
     <string name="no_title">No title</string>
+    <string name="cd_card_info">Card Info</string>
 </resources>
